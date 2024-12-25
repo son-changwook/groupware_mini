@@ -8,7 +8,7 @@ public class HomeController {
 
     @RequestMapping(path = { "/", "home" })
     public String blankPage() {
-        return "blank";
+        return "home";
     }
 
 }
