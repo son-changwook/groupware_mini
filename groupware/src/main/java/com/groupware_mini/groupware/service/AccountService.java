@@ -1,7 +1,9 @@
 package com.groupware_mini.groupware.service;
 
-import com.groupware_mini.groupware.dto.EmployeeDto;
+import com.groupware_mini.groupware.dto.DepartmentDto;
+
+import java.util.List;
 
 public interface AccountService {
-    EmployeeDto getEmployeeInfoByEnployeeName(String employeeName);
+    List<DepartmentDto> getDepartments();
 }

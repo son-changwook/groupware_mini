@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -21,8 +21,9 @@
     <link href="/css/sb-admin-2.css" rel="stylesheet">
 
     <style>
- 
+
     </style>
+
 
 </head>
 
@@ -46,18 +47,18 @@
                             <form id="registerForm" class="user">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                        <input type="text"  id="exampleFirstName"
                                             placeholder="사원 번호">
                                     </div>
-                                   
+
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input type="password"
                                             id="exampleInputPassword" placeholder="비밀번호">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input type="password"
                                             id="exampleRepeatPassword" placeholder="비밀번호 확인">
                                     </div>
                                 </div>
@@ -66,13 +67,13 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3">
-                                        <input type="text" class="form-control form-control-user" id="employeeName"
+                                        <input type="text"  id="employeeName"
                                         placeholder="이름">
                                     </div>
-                                 
+
                                     <div class="col-sm-6 mb-3">
-                                        <select class="form-control form-control-user" id="departmentDropdown">
-                                            <option value="">직급 선택</option>  
+                                        <select  id="departmentDropdown" name="department">
+
                                         </select>
                                     </div>
 <!--
@@ -81,11 +82,11 @@
                                             placeholder="부서">
                                     </div>-->
                                     <div class="col-sm-6 mb-3">
-                                        <input type="email" class="form-control form-control-user" id="employeeEmail"
+                                        <input type="email"  id="employeeEmail"
                                             placeholder="이메일 주소">
                                     </div>
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user"
+                                        <input type="text"
                                             id="employeePhone" placeholder="휴대전화">
                                     </div>
                                 </div>
@@ -93,7 +94,7 @@
                                 <div class="form-group row d-flex align-items-center">
                                     <!-- 주소 입력 필드 -->
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="address" placeholder="주소" readonly>
+                                        <input type="text"  id="address" placeholder="주소" readonly>
                                     </div>
                                     <!-- 주소 검색 버튼 -->
                                     <div class="col-sm-3.5" id="addressApiBtn">
@@ -105,11 +106,11 @@
                                         </a>
                                     </div>
                                 </div>
-                                
+
                                 <!-- 상세주소를 새로운 행으로 만듦 -->
                                 <div class="form-group row">
                                     <div class="col-sm-12">
-                                        <input type="text" class="form-control form-control-user" id="detaileAddress" placeholder="상세주소">
+                                        <input type="text"  id="detaileAddress" placeholder="상세주소">
                                     </div>
                                 </div>
 
@@ -145,7 +146,7 @@
     <script src="/js/sb-admin-2.min.js"></script>
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  
+
     <script>
         // 다음 주소 API start
         function addressAPI() {
@@ -161,7 +162,7 @@
             });
         }
         // 다음 주소 API end
-     
+
         function initRegisterForm() {
             $("#registerForm").submit(function (event){
                 event.preventDefault();  //기본 폼 제출 동작 방지
@@ -176,12 +177,12 @@
                 };
 
                 //유효성 검사
-                if (!formData.employeeId || !formData.employeeName || !formData.employeeEmail || !formData.positionName || !formData.departmentName 
+                if (!formData.employeeId || !formData.employeeName || !formData.employeeEmail || !formData.positionName || !formData.departmentName
                     || !formData.password || formData.password !== formData.confirmPassword) {
                         $("#resultMessage").text("입력 데이터를 확인해주세요.").css("color", "red");
                         return;
                     }
-                
+
                 //회원 가입 요청
                 $.ajax({
                     url: "/account/register",
@@ -217,7 +218,7 @@
                 $("#emailMessage").text("중복 확인 중...").css("color", "orange");
 
 
-                // 실시간으로 입력값에 따라 처리 (500ms 대기기)
+                // 실시간으로 입력값에 따라 처리 (500ms 대기)
                 debounceTimer = setTimeout(() => {
                     $.ajax({
                         url: "/account/check-email",
@@ -240,28 +241,43 @@
         //실시간 입력 확인 END
 
         //직급 가져오기
-        function loadDepartments(){
+        function loadDepartments() {
             $.ajax({
-               url: "/departments",
-               type: "GET",
-               dataType: "json",
-               success: function (data) {
+                url: "/account/departments",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
                     let dropdown = $("#departmentDropdown");
-                    dropdown.empty(); // 기존 옵션 제거
-                    dropdown.append('<option value="">직급 선택</option>'); // 기본 옵션 추가가
-                    // 서버에서 받은 데이터 반복 드롭다운 옵션 추가
-                    $.each(data, function (index, department) {
-                        dropdown.append('<option value="' + department.departmentId + '">' + department.departmentName + '</option>');
+                    dropdown.empty();
+                    dropdown.append('<option value="" disabled selected>직급 선택</option>');
+
+                    console.log("받아온 데이터:", data);
+
+                    if (!data || data.length === 0) {
+                        console.warn("받아온 데이터가 비어 있음!");
+                        return;
+                    }
+
+                    // 드롭다운 옵션 추가 (부모 ID 포함)
+                    data.forEach(dept => {
+                        let parentId = (dept.parentId !== null && dept.parentId !== undefined && dept.parentId !== "null") ? Number(dept.parentId) : null;
+                        let parentInfo = parentId ? `[${parentId}] ` : ""; // 부모 ID가 있을 경우 추가
+
+                        console.log(`드롭다운 추가: ${parentInfo}${dept.departmentName} (ID: ${dept.departmentId}, 부모 ID: ${parentId})`);
+                        dropdown.append(`<option value="${dept.departmentId}">${parentInfo}${dept.departmentName}</option>`);
                     });
-               },
-               error: function(){
-                alert("직급 목록을 불러오는데 실패했습니다.")
-               }
+
+                    console.log("드롭다운 옵션 추가 완료");
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX 오류:", status, error);
+                    alert("직급 목록을 불러오는데 실패했습니다.");
+                }
             });
         }
         //직급 가져오기 END
 
-    
+
 
         $(document).ready(function(){
             initRegisterForm();
