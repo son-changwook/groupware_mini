@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Register</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.css" rel="stylesheet">
+
+    <style>
+ 
+    </style>
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">회원 가입</h1>
+                            </div>
+                            <div>
+                                <h6>로그인정보</h6>
+                            </div>
+                            <form id="registerForm" class="user">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                            placeholder="사원 번호">
+                                    </div>
+                                   
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="exampleInputPassword" placeholder="비밀번호">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="exampleRepeatPassword" placeholder="비밀번호 확인">
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6>사용자자정보</h6>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3">
+                                        <input type="text" class="form-control form-control-user" id="employeeName"
+                                        placeholder="이름">
+                                    </div>
+                                 
+                                    <div class="col-sm-6 mb-3">
+                                        <select class="form-control form-control-user" id="departmentDropdown">
+                                            <option value="">직급 선택</option>  
+                                        </select>
+                                    </div>
+<!--
+                                    <div class="col-sm-6 mb-3">
+                                        <input type="positionId" class="form-control form-control-user" id="positionId"
+                                            placeholder="부서">
+                                    </div>-->
+                                    <div class="col-sm-6 mb-3">
+                                        <input type="email" class="form-control form-control-user" id="employeeEmail"
+                                            placeholder="이메일 주소">
+                                    </div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user"
+                                            id="employeePhone" placeholder="휴대전화">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row d-flex align-items-center">
+                                    <!-- 주소 입력 필드 -->
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control form-control-user" id="address" placeholder="주소" readonly>
+                                    </div>
+                                    <!-- 주소 검색 버튼 -->
+                                    <div class="col-sm-3.5" id="addressApiBtn">
+                                        <a type="button" class="btn btn-primary btn-icon-split w-100">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                            <span class="text">주소검색</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <!-- 상세주소를 새로운 행으로 만듦 -->
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control form-control-user" id="detaileAddress" placeholder="상세주소">
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary btn-user btn-block">
+                                    회원가입
+                                </button>
+                                <hr>
+                            </form>
+                            <div id="resultMessage"></div>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Forgot Password?</a>
+                            </div>
+                            <div class="text-center">
+                                <a class="small" href="login.html">Already have an account? Login!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.min.js"></script>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  
+    <script>
+        // 다음 주소 API start
+        function addressAPI() {
+            $("#addressApiBtn").on("click", function (event) {
+                event.preventDefault(); // 기본 이벤트 방지 (필요시 사용)
+
+                new daum.Postcode({
+                    oncomplete: function (data) {
+                        // 사용자가 주소를 선택하면 해당 값을 입력 필드에 넣기
+                        $("#address").val(data.roadAddress || data.jibunAddress); // 도로명주소 or 지번주소
+                    }
+                }).open();
+            });
+        }
+        // 다음 주소 API end
+     
+        function initRegisterForm() {
+            $("#registerForm").submit(function (event){
+                event.preventDefault();  //기본 폼 제출 동작 방지
+
+                const formData = {
+                    employeeId: $("#employeeId").val(),
+                    password: $("#password").val(),
+                    employeeName: $("#employeeName").val(),
+                    employeeEmail: $("#employeeEmail").val(),
+                    positionName: $("#positionName").val(),
+                    departmentName: $("#departmentName").val(),
+                };
+
+                //유효성 검사
+                if (!formData.employeeId || !formData.employeeName || !formData.employeeEmail || !formData.positionName || !formData.departmentName 
+                    || !formData.password || formData.password !== formData.confirmPassword) {
+                        $("#resultMessage").text("입력 데이터를 확인해주세요.").css("color", "red");
+                        return;
+                    }
+                
+                //회원 가입 요청
+                $.ajax({
+                    url: "/account/register",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        $("#resultMessage").text(response.message);
+                    },
+                    error: function (xhr) {
+                        const errorMessage = xhr.responseJSON?.message || "회원 등록 중 오류가 발생했습니다."
+                        $("#resultMessage").text(errorMessage);
+                    },
+                });
+
+            });
+        }
+
+        //실시간 입력 확인 (input 이벤트 사용용)
+        function initEmailValidation() {
+            let debounceTimer;
+
+            $("#employeeEmail").on("input", function () {
+                clearTimeout(debounceTimer); // 이전 타이머 취소소
+
+                const email = $(this).val();
+
+                if (!email) {
+                    $("#emailMessage").text("이메일을 입력하세요").css("color", "red");
+                    return;
+                }
+
+                $("#emailMessage").text("중복 확인 중...").css("color", "orange");
+
+
+                // 실시간으로 입력값에 따라 처리 (500ms 대기기)
+                debounceTimer = setTimeout(() => {
+                    $.ajax({
+                        url: "/account/check-email",
+                        type: "GET",
+                        data: { employeeEmail: employeeEmail },
+                        success: function (response) {
+                            if (response.available) {
+                                $("#emailMessage").text("사용 가능한 이메일입니다.").css("color", "green");
+                            } else {
+                                $("#emailMessage").text("이미 사용 중인 이메일입니다.").css("color", "red");
+                            }
+                        },
+                        error: function () {
+                            $("#emailMessage").text("이메일 확인 중 오류가 발생했습니다.").css("color", "red");
+                        },
+                    });
+                }, 500); // 입력 후 500ms 동안 멈췄을 때만 요청 실행
+            });
+        }
+        //실시간 입력 확인 END
+
+        //직급 가져오기
+        function loadDepartments(){
+            $.ajax({
+               url: "/departments",
+               type: "GET",
+               dataType: "json",
+               success: function (data) {
+                    let dropdown = $("#departmentDropdown");
+                    dropdown.empty(); // 기존 옵션 제거
+                    dropdown.append('<option value="">직급 선택</option>'); // 기본 옵션 추가가
+                    // 서버에서 받은 데이터 반복 드롭다운 옵션 추가
+                    $.each(data, function (index, department) {
+                        dropdown.append('<option value="' + department.departmentId + '">' + department.departmentName + '</option>');
+                    });
+               },
+               error: function(){
+                alert("직급 목록을 불러오는데 실패했습니다.")
+               }
+            });
+        }
+        //직급 가져오기 END
+
+    
+
+        $(document).ready(function(){
+            initRegisterForm();
+            initEmailValidation();
+            addressAPI();
+            loadDepartments();
+        });
+    </script>
+
+</body>
+
+</html>
