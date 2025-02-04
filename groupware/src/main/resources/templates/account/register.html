@@ -72,11 +72,16 @@
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
-                                        <select  id="departmentDropdown" name="department">
-
+                                        <label for="departmentDropdown"></label>
+                                        <select id="departmentDropdown" name="department">
                                         </select>
                                     </div>
-<!--
+                                    <div class="col-sm-6 mb-3">
+                                        <label for="positionDropdown"></label>
+                                        <select id="positionDropdown" name="position">
+                                        </select>
+                                    </div>
+                                    <!--
                                     <div class="col-sm-6 mb-3">
                                         <input type="positionId" class="form-control form-control-user" id="positionId"
                                             placeholder="부서">
@@ -249,41 +254,62 @@
                 success: function (data) {
                     let dropdown = $("#departmentDropdown");
                     dropdown.empty();
-                    dropdown.append('<option value="" disabled selected>직급 선택</option>');
-
-                    console.log("받아온 데이터:", data);
+                    dropdown.append('<option value="" disabled selected>부서 선택</option>');
 
                     if (!data || data.length === 0) {
                         console.warn("받아온 데이터가 비어 있음!");
                         return;
                     }
-
-                    // 드롭다운 옵션 추가 (부모 ID 포함)
+                    // 드롭다운 옵션 추가
                     data.forEach(dept => {
-                        let parentId = (dept.parentId !== null && dept.parentId !== undefined && dept.parentId !== "null") ? Number(dept.parentId) : null;
-                        let parentInfo = parentId ? `[${parentId}] ` : ""; // 부모 ID가 있을 경우 추가
-
-                        console.log(`드롭다운 추가: ${parentInfo}${dept.departmentName} (ID: ${dept.departmentId}, 부모 ID: ${parentId})`);
-                        dropdown.append(`<option value="${dept.departmentId}">${parentInfo}${dept.departmentName}</option>`);
+                        let parentName = dept.parentName;
+                        let departmentName = dept.departmentName;
+                        let departmentId = dept.departmentId;
+                        dropdown.append(`<option value="${departmentId}">${parentName}-${departmentName}</option>`);
                     });
-
-                    console.log("드롭다운 옵션 추가 완료");
                 },
                 error: function (xhr, status, error) {
-                    console.error("AJAX 오류:", status, error);
-                    alert("직급 목록을 불러오는데 실패했습니다.");
+                    alert("부서 목록을 불러오는데 실패했습니다.");
                 }
             });
         }
         //직급 가져오기 END
 
+        //부서 가져오기
+        function loadPositions(){
+            $.ajax({
+                url: "/account/positions",
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    let dropdown = $("#positionDropdown");
+                    dropdown.empty();
+                    dropdown.append('<option value="" disabled selected>직급 선택</option>');
 
+                    if(!data || data.length === 0) {
+                        console.warn("받아온 데이터가 비어 있음!");
+                        return;
+                   }
+                   //드롭다운 옵션 추가
+                   data.forEach(dept => {
+                        let positionName = dept.positionName;
+                        let positionId = dept.positionId;
+                        dropdown.append(`<option value="${positionId}">${positionName}</option>`)
+                   });
+                },
+                error: function(xhr, status, error){
+                    alert("직급 목록을 불러오는데 실패했습니다.")
+                }
+            });
+        }
+        //부서 가져오기 END
 
         $(document).ready(function(){
             initRegisterForm();
             initEmailValidation();
             addressAPI();
             loadDepartments();
+            loadPositions();
         });
     </script>
 

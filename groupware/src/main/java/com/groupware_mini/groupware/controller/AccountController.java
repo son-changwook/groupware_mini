@@ -1,6 +1,7 @@
 package com.groupware_mini.groupware.controller;
 
 import com.groupware_mini.groupware.dto.DepartmentDto;
+import com.groupware_mini.groupware.dto.EmpPositionDto;
 import com.groupware_mini.groupware.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -32,5 +33,11 @@ public class AccountController {
         return accountService.getDepartments();
     }
 
+    @GetMapping("/positions")
+    @ResponseBody
+    public List<EmpPositionDto> getPositions() {
+        return accountService.getPositions();
+
+    }
 
 }

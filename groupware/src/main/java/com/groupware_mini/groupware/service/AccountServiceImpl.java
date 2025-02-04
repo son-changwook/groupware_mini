@@ -1,6 +1,7 @@
 package com.groupware_mini.groupware.service;
 
 import com.groupware_mini.groupware.dto.DepartmentDto;
+import com.groupware_mini.groupware.dto.EmpPositionDto;
 import com.groupware_mini.groupware.dto.EmployeeDto;
 import com.groupware_mini.groupware.mapper.AccountMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,11 @@ public class AccountServiceImpl implements AccountService {
 
     public List<DepartmentDto> getDepartments(){
         return accountMapper.getAllDepartments();
+    }
+
+    @Override
+    public List<EmpPositionDto> getPositions() {
+        return accountMapper.getAllPositions();
     }
 
 }
